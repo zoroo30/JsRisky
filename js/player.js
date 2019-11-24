@@ -43,6 +43,10 @@ class Player {
         from.attack(to, troopsCount);
     }
 
+    playTurn() {
+        
+    }
+
     endTurn() {
 
     }

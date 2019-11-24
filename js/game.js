@@ -7,7 +7,7 @@
 */
 
 class Game {
-    constructor(game_map = new EgyptMap(), players = [new Player("#78e6d0"), new Player("#ff4356")]) {
+    constructor(game_map = new EgyptMap(), players = [new PassiveAgent("#78e6d0"), new HumanAgent("#ff4356")]) {
         if (!!Game.instance) {
             return Game.instance;
         }
@@ -64,6 +64,7 @@ class Game {
             this.players.push(this.selectedPlayer);
             this.distributionStage = this.nextTurnStage();
             this.board.update();
+            this.selectedPlayer.playTurn();
         } else {
             document.getElementById("end-game").style.display = "inline-block"
             document.getElementById("in-game").style.display = "none";
@@ -76,7 +77,8 @@ class Game {
         }
     }
 
-    addBonusTroops(player = this.selectedPlayer) {
+    addBonusTroops() {
+        console.log(this.selectedPlayer)
         let troops = Math.floor(this.selectedPlayer.territoriesCount() / 3)
         if (troops < 3) troops = 3
         if (this.selectedPlayer.playedFirstTime)
@@ -96,20 +98,23 @@ class Game {
         return this.distributionStage;
     }
 
-    commitTroopsDistribution = () => {
+    commitTroopsDistribution = (internalCommit = false) => {
         if (this.selectedPlayer.getAvailableTroops() != 0) {
             if (!confirm("You didn't distribute all of your troops. If you commit now you won't be able to use these troops until your next turn. are you sure you want to do that?"))
                 return;
         }
-        this.selectedPlayer.commitTroopsDistripution();
-        if (this.selectedPlayer.playedFirstTime)
+        internalCommit && this.selectedPlayer.commitTroopsDistripution();
+        let isTurnNotEnded = true;
+        if (this.selectedPlayer.playedFirstTime){
             this.nextTurnStage();
-        else {
+        } else {
             this.selectedPlayer.playedFirstTime = true;
             this.nextTurnStage();
             this.nextTurn();
+            isTurnNotEnded = false;
         }
         this.board.update();
+        return isTurnNotEnded;
     }
 
     attack = (troops) => {
