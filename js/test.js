@@ -59,3 +59,21 @@ function ConvertToCSV(objArray) {
 
     return str;
 }
+
+
+/**
+ * todo
+ * - turns mangment : 
+ *      selected player
+ *      commit distribution button
+ *      selected state
+ *      attack (troops text box and attack button)
+ *      end turn button
+ *      NOTE : FIRST TURN only troops distripution is made
+ * - visiualization class :
+ *      add caplities to choose the map to visualize with different scaling parameters
+ *      update method
+ * - history management :
+ *      keep track of the board state after each turn
+ *      after the game ending be able to see the history   
+ */

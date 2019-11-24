@@ -21,8 +21,8 @@ class Territory {
         return this.neighbours;
     }
 
-    getEnemyNighbours() {
-
+    hasNeighbour(neighbourId) {
+        return this.neighbours.includes(neighbourId);
     }
 
     /* TROOPS */
@@ -36,14 +36,14 @@ class Territory {
     }
 
     addTroops(count = 1) {
-        if (this.player.takeFromAvilableTroops(count) != -1)
+        if (this.player.takeFromAvailableTroops(count) != -1)
             this.addedTroops += count;
         return this.getTroopsNumber();
     }
 
     removeTroops(count = 1) {
         if (this.addedTroops === 0) return this.troops;
-        this.player.addToAvilableTroops(count);
+        this.player.addToAvailableTroops(count);
         this.addedTroops -= count;
         return this.getTroopsNumber();
     }
@@ -67,14 +67,17 @@ class Territory {
      */
     attack(territory, troopsCount) {
         this.troops -= troopsCount;
-        result = troopsCount - territory.getTroopsNumber();
+        const result = troopsCount - territory.getTroopsNumber();
+        console.log(result, troopsCount, territory, territory.getTroopsNumber());
         if (result === 0) // draw
             territory.setTroopsNumber(1);
         else if (result < 0) // defense won
             territory.setTroopsNumber(-result);
         else { // attack won
             territory.setTroopsNumber(result);
+            territory.getPlayer().lose(territory);
             territory.setPlayer(this.player);
+            this.player.setOwner(territory);
         }
     }
 }

@@ -7,8 +7,25 @@
 </head>
 
 <body>
+    
     <div id="map"></div>
-    <div id="player-data"></div>
+    <div id="controls">
+        <p>player: </p>
+        <div id="current-player"></div>
+        <div id="in-game">
+            <p>available troops: <span id="troops-count">20</span></p>
+            <button id="commit">commit troops distribution</button>
+            <p>from: <span id="from">not selected</span>; to: <span id="to">not selected</span></p>
+            <input type="number" id="attack-troops-count" min="0" value="0" max="0" />
+            <button id="attack">attack</button>
+            <button id="end-turn">end turn</button>
+        </div>
+        <div id="end-game">
+            <p>won!! history: </p>
+            <input type="range" id="history" min="0" step="1">
+        </div>
+    </div>
+    <button id="new-game">new game</button>
 
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.12.0/d3.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script> -->
@@ -20,13 +37,35 @@
     <script src="js/game_map.js"></script>
     <script src="js/egypt_map.js"></script>
     <script src="js/player.js"></script>
-    
+
     <script src="js/visualization.js"></script>
     <script src="js/board.js"></script>
     <script src="js/game.js"></script>
 
-    <script >
-        const game = new Game();
+    <script>
+        document.getElementById("new-game").onclick = () => {
+            if (!confirm("you sure you want to start new game?"))
+                return;
+            EgyptMap.instance = null;
+            Game.instance = null;
+            game_map_visualization.instance = null;
+            document.getElementById("map").innerHTML = "";
+            game = new Game();
+
+            document.getElementById("controls").style.display = "inline-block";
+            document.getElementById("in-game").style.display = "inline-block";
+            document.getElementById("end-game").style.display = "none";
+
+            document.getElementById("end-turn").onclick = game.nextTurn;
+            document.getElementById("commit").onclick = game.commitTroopsDistribution;
+            document.getElementById("attack").onclick = () => {
+                const input = document.getElementById("attack-troops-count");
+                input.value = Math.min(parseInt(input.max), parseInt(input.value))
+                const value = parseInt(input.value);
+                console.log(value)
+                game.attack(value);
+            };
+        }
     </script>
 </body>
 

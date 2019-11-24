@@ -1,6 +1,7 @@
 class EgyptMap extends GameMap {
     constructor() {
         super();
+        
         if (!!EgyptMap.instance) {
             return EgyptMap.instance;
         }
@@ -24,7 +25,7 @@ class EgyptMap extends GameMap {
         this.territories.set('BH', new Territory('BH', ['KS', 'GH', 'MF', 'IK', 'JZ', 'MT']));
         this.territories.set('IK', new Territory('IK', ['BH', 'MT']));
         this.territories.set('QH', new Territory('QH', ['QL', 'SQ', 'IS', 'SW', 'JZ']));
-        this.territories.set('JZ', new Territory('JZ', ['MT', 'BH', 'MF', 'QL', 'QH', 'BA', 'FY', 'BN', 'MN', 'WJ']));
+        this.territories.set('JZ', new Territory('JZ', ['MT', 'SW', 'BH', 'MF', 'QL', 'QH', 'BA', 'FY', 'BN', 'MN', 'WJ']));
         this.territories.set('MN', new Territory('MN', ['AT', 'BA', 'BN', 'JZ', 'WJ']));
         this.territories.set('FY', new Territory('FY', ['JZ', 'BN']));
         this.territories.set('BN', new Territory('BN', ['JZ', 'MN', 'BA', 'FY']));

@@ -13,6 +13,8 @@ class Board {
         this.game_map = game_map;
         this.players = players;
         this.initialize();
+        this.visualization = new game_map_visualization(this.game_map);
+        this.visualization.updateControls();
     }
 
     initialize() {
@@ -26,11 +28,10 @@ class Board {
                 player.setOwner(iter.next().value);
             else i--;
         }
-
     }
 
-    plot() {
-        console.log(this.game_map);
-        const visualization = new game_map_visualization(this.game_map);
+    update() {
+        this.visualization.update();
+        this.visualization.updateControls();
     }
 }
