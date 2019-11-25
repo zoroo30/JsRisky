@@ -41,7 +41,6 @@ class game_map_visualization {
     historyUpdate(territories) {
         for (let territory of territories) {
             d3.select(`.city-label#${territory[1].id}`).text(territory[1].troops);
-            console.log(territory[1])
             d3.select(`#${territory[1].id}`).attr("style", "fill:" + territory[1].player.color);
         }
     }
@@ -59,7 +58,6 @@ class game_map_visualization {
     }
 
     updateControls() {
-        console.log(this.game.selectedPlayer)
         d3.select("#current-player").attr("style", "background-color:" + this.game.selectedPlayer.color);
         d3.select("#troops-count").text(this.game.selectedPlayer.getAvailableTroops());
         if (this.game.isDistributionStage()) {
@@ -88,7 +86,6 @@ class game_map_visualization {
         if (this.game.isCurrentPlayer(id) && this.game.isDistributionStage()) {
             let troops = this.game_map.addTroops(id, count);
             d3.select(`.city-label#${id}`).text(troops);
-            console.log(id, troops)
         } else if (!this.game.isDistributionStage()) {
             if (this.game.isCurrentPlayer(id))
                 this.game.setSelectedTerritoryId(id);

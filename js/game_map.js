@@ -15,7 +15,7 @@ class GameMap {
     }
 
     isNeighbour(id, neighbourId) {
-        if(!id) return false;
+        if (!id) return false;
         return this.territories.get(id).hasNeighbour(neighbourId);
     }
 
@@ -23,6 +23,16 @@ class GameMap {
         let neighbours = this.getNeighbours(id);
         let territory = this.territories.get(id);
         return neighbours.filter(id => territory.player != this.territories.get(id).player)
+    }
+
+    hasEnemyNeighbours(id) {
+        console.log(id)
+        const neighboursIds = this.getNeighbours(id);
+        const territory = this.getTerritory(id);
+        for (let neighbourId of neighboursIds) {
+            if (this.getTerritory(neighbourId).getPlayer() != territory.player) return true;
+        }
+        return false;
     }
 
     getTroopsNumber(id) {

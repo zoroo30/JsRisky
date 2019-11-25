@@ -11,6 +11,12 @@ class Player {
         this.territories.add(territory)
     }
 
+    // needs improvment and refactoring to be fater for ai agents
+    getBorderTerritories() {
+        let border = [...this.territories].filter(territory => Game.instance.game_map.getEnemyNeighbours(territory.id).length != 0);
+        return border;
+    }
+
     lose(territory) {
         if(this.territories.has(territory))
             this.territories.delete(territory);

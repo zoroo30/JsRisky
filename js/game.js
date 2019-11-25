@@ -7,7 +7,7 @@
 */
 
 class Game {
-    constructor(game_map = new EgyptMap(), players = [new PassiveAgent("#78e6d0"), new HumanAgent("#ff4356")]) {
+    constructor(game_map = new EgyptMap(), players = [new HumanAgent("#ff4356"), new PassiveAgent("#78e6d0")]) {
         if (!!Game.instance) {
             return Game.instance;
         }
@@ -53,6 +53,7 @@ class Game {
 
     initialize() {
         this.board = new Board(this.game_map, this.players)
+        this.selectedPlayer.playTurn();
     }
 
     nextTurn = () => {
@@ -65,20 +66,21 @@ class Game {
             this.distributionStage = this.nextTurnStage();
             this.board.update();
             this.selectedPlayer.playTurn();
-        } else {
-            document.getElementById("end-game").style.display = "inline-block"
-            document.getElementById("in-game").style.display = "none";
-            const historySlider = document.getElementById("history");
-            historySlider.max = this.history.length - 1;
-            historySlider.value = this.history.length - 1;
-            historySlider.onchange = () => {
-                this.board.visualization.historyUpdate(this.history[parseInt(document.getElementById("history").value)])
-            }
+        } else this.endgame()
+    }
+
+    endgame = () => {
+        document.getElementById("end-game").style.display = "inline-block"
+        document.getElementById("in-game").style.display = "none";
+        const historySlider = document.getElementById("history");
+        historySlider.max = this.history.length - 1;
+        historySlider.value = this.history.length - 1;
+        historySlider.onchange = () => {
+            this.board.visualization.historyUpdate(this.history[parseInt(document.getElementById("history").value)])
         }
     }
 
     addBonusTroops() {
-        console.log(this.selectedPlayer)
         let troops = Math.floor(this.selectedPlayer.territoriesCount() / 3)
         if (troops < 3) troops = 3
         if (this.selectedPlayer.playedFirstTime)

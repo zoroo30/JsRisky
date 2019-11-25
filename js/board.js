@@ -17,6 +17,7 @@ class Board {
         this.visualization.updateControls();
     }
 
+    // should randomize placement of armies as well
     initialize() {
         const territories = this.game_map.getTerritories(),
             playersCount = this.players.length;

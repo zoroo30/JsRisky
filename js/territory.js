@@ -68,7 +68,6 @@ class Territory {
     attack(territory, troopsCount) {
         this.troops -= troopsCount;
         const result = troopsCount - territory.getTroopsNumber();
-        console.log(result, troopsCount, territory, territory.getTroopsNumber());
         if (result === 0) // draw
             territory.setTroopsNumber(1);
         else if (result < 0) // defense won
