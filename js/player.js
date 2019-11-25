@@ -49,6 +49,52 @@ class Player {
         from.attack(to, troopsCount);
     }
 
+    getMaxTroopsTerritory(territories = this.territories) {
+        if (territories.length === 0) return null;
+        let max;
+        if (territories instanceof Set) {
+            territories = territories.values()
+            max = territories.next().value;
+        } else max = territories[0];
+        for (let territory of territories) {
+            if (territory.troops > max.troops) max = territory;
+        }
+        return max;
+    }
+
+    getMinTroopsTerritory(territories = this.territories) {
+        if (territories.length === 0) return null;
+        let min;
+        if (territories instanceof Set) {
+            territories = territories.values()
+            min = territories.next().value;
+        } else min = territories[0];
+        for (let territory of territories) {
+            if (territory.troops < min.troops) min = territory;
+        }
+        return min;
+    }
+
+    getMinNeighbourTerritory(territory) {
+        const neighboursIds = Game.instance.game_map.getEnemyNeighbours(territory.id);
+        let neighboursTerritories = [];
+        for (let i = 0; i < neighboursIds.length; i++) {
+            let t = Game.instance.game_map.getTerritory(neighboursIds[i]);
+            neighboursTerritories.push(t);
+        }
+        return this.getMinTroopsTerritory(neighboursTerritories);
+    }
+    
+    getMaxNeighbourTerritory(territory) {
+        const neighboursIds = Game.instance.game_map.getEnemyNeighbours(territory.id);
+        let neighboursTerritories = [];
+        for (let i = 0; i < neighboursIds.length; i++) {
+            let t = Game.instance.game_map.getTerritory(neighboursIds[i]);
+            neighboursTerritories.push(t);
+        }
+        return this.getMaxTroopsTerritory(neighboursTerritories);
+    }
+
     playTurn() {
         
     }

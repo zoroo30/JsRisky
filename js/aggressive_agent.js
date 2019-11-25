@@ -11,29 +11,6 @@ class AggressiveAgent extends Player {
         this.availableTroops = 0;
     }
 
-    getMaxTroopsTerritory(territories = this.territories) {
-        if (territories.length === 0) return null;
-        let max;
-        if (territories instanceof Set) {
-            territories = territories.values()
-            max = territories.next().value;
-        } else max = territories[0];
-        for (let territory of territories) {
-            if (territory.troops > max.troops) max = territory;
-        }
-        return max;
-    }
-
-    getMaxNeighbourTerritory(territory) {
-        const neighboursIds = Game.instance.game_map.getEnemyNeighbours(territory.id);
-        let neighboursTerritories = [];
-        for (let i = 0; i < neighboursIds.length; i++) {
-            let t = Game.instance.game_map.getTerritory(neighboursIds[i]);
-            neighboursTerritories.push(t);
-        }
-        return this.getMaxTroopsTerritory(neighboursTerritories);
-    }
-
     attack() {
         let from = this.getMaxTroopsTerritory(this.getBorderTerritories());
         let to = this.getMaxNeighbourTerritory(from);
