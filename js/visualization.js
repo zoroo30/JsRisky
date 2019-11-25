@@ -22,13 +22,13 @@ class game_map_visualization {
             .defer(d3.json, "js/egypt.topojson")
             .await(this.ready)
 
-        this.projection = d3.geoMercator()
-            .translate([this.width / 2, this.height / 2])
-            .scale(3000)
-            .center([30, 27])
+        // this.projection = d3.geoMercator()
+        //     .translate([this.width / 2, this.height / 2])
+        //     .scale(3000)
+        //     .center([30, 27])
 
-        this.path = d3.geoPath()
-            .projection(this.projection)
+        // this.path = d3.geoPath()
+        //     .projection(this.projection)
 
 
         this.game_map = game_map;
@@ -58,7 +58,9 @@ class game_map_visualization {
     }
 
     updateControls() {
-        d3.select("#current-player").attr("style", "background-color:" + this.game.selectedPlayer.color);
+        d3.select("#current-player")
+        .attr("style", "border-color:" + this.game.selectedPlayer.color)
+        .text(this.game.selectedPlayer.agentName);
         d3.select("#troops-count").text(this.game.selectedPlayer.getAvailableTroops());
         if (this.game.isDistributionStage()) {
             d3.selectAll("#commit").attr("disabled", null)

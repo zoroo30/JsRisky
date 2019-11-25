@@ -1,4 +1,9 @@
 class AggressiveAgent extends Player {
+    constructor(color) {
+        super(color);
+        this.agentName = "Aggressive"
+    }
+
     playTurn() {
         this.deployTroops();
         if (Game.instance.commitTroopsDistribution())

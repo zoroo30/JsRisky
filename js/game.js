@@ -58,15 +58,18 @@ class Game {
 
     nextTurn = () => {
         this.history.push(new Map(JSON.parse(JSON.stringify(Array.from(this.game_map.territories)))))
-        if (!this.hasEnded()) {
-            this.deleteSelected();
-            this.selectedPlayer = this.players.shift();
-            this.addBonusTroops();
-            this.players.push(this.selectedPlayer);
-            this.distributionStage = this.nextTurnStage();
-            this.board.update();
-            this.selectedPlayer.playTurn();
-        } else this.endgame()
+        if (this.history.length <= 100) {
+            if (!this.hasEnded()) {
+                this.deleteSelected();
+                this.selectedPlayer = this.players.shift();
+                this.addBonusTroops();
+                this.players.push(this.selectedPlayer);
+                this.distributionStage = this.nextTurnStage();
+                this.board.update();
+                this.selectedPlayer.playTurn();
+            } else this.endgame()
+        }
+        else alert("maximum number of turns exceeded")
     }
 
     endgame = () => {
@@ -107,7 +110,7 @@ class Game {
         }
         internalCommit && this.selectedPlayer.commitTroopsDistripution();
         let isTurnNotEnded = true;
-        if (this.selectedPlayer.playedFirstTime){
+        if (this.selectedPlayer.playedFirstTime) {
             this.nextTurnStage();
         } else {
             this.selectedPlayer.playedFirstTime = true;

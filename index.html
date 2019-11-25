@@ -7,7 +7,7 @@
 </head>
 
 <body>
-    
+
     <div id="map"></div>
     <div id="controls">
         <p>player: </p>
@@ -22,7 +22,11 @@
         </div>
         <div id="end-game">
             <p>won!! history: </p>
-            <input type="range" id="history" min="0" step="1">
+            <button id="first">
+                <<</button> <button id="previous">
+                    <</button> <input type="range" id="history" min="0" step="1">
+                        <button id="next">></button>
+                        <button id="last">>></button>
         </div>
     </div>
     <button id="new-game">new game</button>
@@ -44,6 +48,9 @@
     <script src="js/pacifist_agent.js"></script>
 
     <script src="js/visualization.js"></script>
+    <script src="js/egypt_map_visualization.js"></script>
+    <script src="js/us_map_visualization.js"></script>
+
     <script src="js/board.js"></script>
     <script src="js/game.js"></script>
 
@@ -64,6 +71,22 @@
 
             game = new Game();
 
+            const historyInput = document.getElementById("history");
+
+            document.getElementById("first").onclick = () => { historyInput.value = 0; historyInput.onchange() }
+            document.getElementById("last").onclick = () => { historyInput.value = historyInput.max; historyInput.onchange() }
+            document.getElementById("previous").onclick = () => {
+                if (historyInput.value != 0) {
+                    historyInput.value--;
+                    historyInput.onchange()
+                }
+            }
+            document.getElementById("next").onclick = () => {
+                if (historyInput.value != historyInput.max) {
+                    historyInput.value++;
+                    historyInput.onchange()
+                }
+            }
             document.getElementById("end-turn").onclick = game.nextTurn;
             document.getElementById("commit").onclick = () => game.commitTroopsDistribution(true);
             document.getElementById("attack").onclick = () => {

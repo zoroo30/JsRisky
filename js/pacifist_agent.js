@@ -1,4 +1,9 @@
 class PacifistAgent extends Player {
+    constructor(color) {
+        super(color);
+        this.agentName = "Pacifist"
+    }
+
     playTurn() {
         this.deployTroops();
         if (Game.instance.commitTroopsDistribution())
@@ -10,7 +15,7 @@ class PacifistAgent extends Player {
         territory.setTroopsNumber(territory.troops + this.availableTroops);
         this.availableTroops = 0;
     }
-    
+
     attack() {
         let from = this.getMaxTroopsTerritory(this.getBorderTerritories());
         let to = this.getMinNeighbourTerritory(from);
