@@ -7,7 +7,7 @@
 */
 
 class Game {
-    constructor(game_map = new EgyptMap(), players = [new HumanAgent("#ff4356"), new HumanAgent("#78e6d0")]) {
+    constructor(game_map = new UsMap(), players = [new HumanAgent("#ff4356"), new HumanAgent("#78e6d0")]) {
         if (!!Game.instance) {
             return Game.instance;
         }

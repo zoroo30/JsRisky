@@ -7,8 +7,8 @@ class UsMapVisualization extends game_map_visualization {
 
         this.projection = d3.geoMercator()
             .translate([this.width / 2, this.height / 2])
-            .scale(3000)
-            .center([30, 27])
+            .scale(800)
+            .center([-95, 35])
 
         this.path = d3.geoPath()
             .projection(this.projection)
@@ -16,10 +16,15 @@ class UsMapVisualization extends game_map_visualization {
 
     }
 
-    ready = (error, data) => {
+    ready = (error, data, cities) => {
         if (error) throw error;
 
-        let states = topojson.feature(data, data.objects.us).features;
+        let states = data.features;
+        // let states = topojson.feature(data, data.objects.us).features;
+
+        console.log(states);
+
+        //console.log(cities);
 
         let state = this.svg.selectAll(".state")
             .data(states)
@@ -71,7 +76,7 @@ class UsMapVisualization extends game_map_visualization {
                 return coords[1];
             })
             .text(({ properties: s }) => {
-                return this.game_map.getTroopsNumber(s.id);
+                return s.id//this.game_map.getTroopsNumber(s.id);
             })
             .attr("dx", -5)
             .attr("dy", 2.5)

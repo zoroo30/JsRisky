@@ -13,7 +13,8 @@ class Board {
         this.game_map = game_map;
         this.players = players;
         this.initialize();
-        this.visualization = new EgyptMapVisualization(this.game_map);
+        //this.visualization = new EgyptMapVisualization(this.game_map);
+        this.visualization = new UsMapVisualization(this.game_map);
         this.visualization.updateControls();
     }
 

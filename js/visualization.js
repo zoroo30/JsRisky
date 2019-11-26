@@ -18,9 +18,9 @@ class game_map_visualization {
             .append("g")
             .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
 
-        d3.queue()
-            .defer(d3.json, "js/egypt.topojson")
-            .await(this.ready)
+        // d3.queue()
+        //     .defer(d3.json, "js/egypt.topojson")
+        //     .await(this.ready)
 
         // this.projection = d3.geoMercator()
         //     .translate([this.width / 2, this.height / 2])
