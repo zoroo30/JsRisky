@@ -164,7 +164,7 @@ class game_map_visualization {
 
     heighlightNeighbours(id, heighlight = true) {
         if (!this.game.isCurrentPlayer(id)) return;
-        const neighbours = this.game_map.getEnemyNeighbours(id);
+        const neighbours = this.game_map.getNeighbours(id);
         for (let i = 0; i < neighbours.length; i++) {
             if (heighlight == true || !this.game_map.isNeighbour(this.game.getSelectedTerritoryId(), neighbours[i]))
                 d3.select(`#${neighbours[i]}`).attr("style", ({ properties: s }) => {

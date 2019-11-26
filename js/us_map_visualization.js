@@ -30,14 +30,14 @@ class UsMapVisualization extends game_map_visualization {
             .data(states)
             .enter().append("g")
             .on("mouseover", ({ properties: s }) => {
-                if (!this.game.isCurrentPlayer(s.id)) return;
+                //if (!this.game.isCurrentPlayer(s.id)) return;
                 d3.select(`#${s.id}`).attr("style", ({ properties: s }) => {
                     return "fill:" + this.LightenDarkenColor(this.game_map.getPlayer(s.id).color, -100)
                 }).classed("selected", true)
                 this.heighlightNeighbours(s.id);
             })
             .on("mouseout", ({ properties: s }) => {
-                if (!this.game.isCurrentPlayer(s.id)) return;
+                //if (!this.game.isCurrentPlayer(s.id)) return;
                 if (s.id == this.game.getSelectedTerritoryId()) return
                 d3.select(`#${s.id}`).attr("style", ({ properties: s }) => {
                     return "fill:" + this.game_map.getPlayer(s.id).color
