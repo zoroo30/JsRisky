@@ -1,25 +1,31 @@
 class Turn {
-    constructor(player, stateBefore = Game.instance.getCurrentState(), deploymentMoves = [], attackMoves = []) {
+    constructor(player, stateBefore = Game.instance.getCurrentState(), deploymentMoves = [
+        { territoryId: "SS", numberOfTroops: 20 }, { territoryId: "SS", numberOfTroops: 50 }
+    ], attackMoves = [
+        { fromId: "SS", toId: "JS", numberOfTroops: 30 }
+    ]) {
         this.player = player;
-        this.deploymentMoves = deploymentMoves; // [{territory, numberOfTroops}, ...]
-        this.attackMoves = attackMoves; // [{from, to, numberOfTroops}, ...]
+        this.deploymentMoves = deploymentMoves; // [{territoryId, numberOfTroops}, ...]
+        this.attackMoves = attackMoves; // [{fromId, toId, numberOfTroops}, ...]
         this.score = 0;
         this.stateBefore = stateBefore;
         this.stateAfter = null;
     }
 
-    /* ON REAL MAP */
-    deployTroops() {
+    deployTroops(state = Game.instance.game_map) {
         for (let i = 0; i < this.deploymentMoves.length; i++) {
-            const { territory, numberOfTroops } = this.deploymentMoves[i];
+            const { territoryId, numberOfTroops } = this.deploymentMoves[i];
+            const territory = state.get(territoryId);
             territory.setTroopsNumber(territory.troops + numberOfTroops);
             this.player.availableTroops -= numberOfTroops;
         }
     }
 
-    attack() {
+    attack(state = Game.instance.game_map) {
         for (let i = 0; i < this.attackMoves.length; i++) {
-            const {from, to, numberOfTroops} = this.attackMoves[i];
+            const { fromId, toId, numberOfTroops } = this.attackMoves[i];
+            const from = state.get(fromId);
+            const to = state.get(toId);
             from.attack(to, numberOfTroops);
         }
     }
@@ -27,20 +33,18 @@ class Turn {
     /* SIMULATION */
     simulateStateAfter() {
         this.stateAfter = new Map(_.cloneDeep(this.stateBefore));
-
+        this.deployTroops(this.stateAfter)
+        this.attack(this.stateAfter)
+        return this.calcScore()
     }
 
-    simulateDeployTroops(state = this.stateAfter) {
-        for (let i = 0; i < this.deploymentMoves.length; i++) {
-            const { territory, numberOfTroops } = this.deploymentMoves[i];
-            territory.setTroopsNumber(territory.troops + numberOfTroops);
-        }
+    calcScore(state = this.stateAfter) {
+        let score = 0;
+        return score;
     }
 
-    simulateAttack(state = this.stateAfter) {
-        for (let i = 0; i < this.attackMoves.length; i++) {
-            const {from, to, numberOfTroops} = this.attackMoves[i];
-            from.attack(to, numberOfTroops);
-        }
+    /* COMPARE 2 TURNS AND CHECK IF THEY ARE THE SAME OR NOT */
+    isEqual(turn) {
+        return JSON.stringify(JSON.stringify(Array.from(this.stateAfter))) === JSON.stringify(JSON.stringify(Array.from(turn.stateAfter)))
     }
 }
