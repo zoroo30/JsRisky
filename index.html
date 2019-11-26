@@ -10,8 +10,10 @@
 
     <div id="map"></div>
     <div id="controls">
-        <p>player: </p>
-        <div id="current-player"></div>
+        <div id="player">
+            <p>player: </p>
+            <div id="current-player"></div>
+        </div>
         <div id="in-game">
             <p>available troops: <span id="troops-count">20</span></p>
             <button id="commit">commit troops distribution</button>
@@ -21,7 +23,7 @@
             <button id="end-turn">end turn</button>
         </div>
         <div id="end-game">
-            <p>won!! history: </p>
+            <p id="won">won!! history: </p>
             <button id="first">
                 <<</button> <button id="previous">
                     <</button> <input type="range" id="history" min="0" step="1">
@@ -36,6 +38,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.11.0/d3.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.15/lodash.min.js"></script>
 
     <script src="js/territory.js"></script>
     <script src="js/game_map.js"></script>

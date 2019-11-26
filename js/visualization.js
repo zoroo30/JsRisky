@@ -33,7 +33,7 @@ class game_map_visualization {
 
         this.game_map = game_map;
         // Game is singleton class
-        this.game = new Game();
+        this.game = Game.instance;
 
         return this;
     }

@@ -29,6 +29,18 @@ class Board {
                 player.setOwner(iter.next().value);
             else i--;
         }
+
+        for (let p = 0; p < this.players.length ; p++) {
+            const player = this.players[p];
+            let max = player.availableTroops
+            let playerTerritories = [...player.territories];
+            for (let i = 0; i < max; i++) {
+                let randomTerritoryIndex = Math.floor(Math.random() * playerTerritories.length);
+                console.log(randomTerritoryIndex)
+                playerTerritories[randomTerritoryIndex].setTroopsNumber(playerTerritories[randomTerritoryIndex].troops + 1);
+                player.availableTroops--;
+            }
+        }
     }
 
     update() {

@@ -1,7 +1,7 @@
 class Player {
     constructor(color) {
         this.color = color;
-        this.playedFirstTime = false;
+        this.playedFirstTime = true;
         this.territories = new Set();
         this.availableTroops = 20;
     }

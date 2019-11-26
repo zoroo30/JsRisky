@@ -7,7 +7,7 @@
 */
 
 class Game {
-    constructor(game_map = new EgyptMap(), players = [new AggressiveAgent("#ff4356"), new PacifistAgent("#78e6d0")]) {
+    constructor(game_map = new EgyptMap(), players = [new HumanAgent("#ff4356"), new HumanAgent("#78e6d0")]) {
         if (!!Game.instance) {
             return Game.instance;
         }
@@ -53,12 +53,17 @@ class Game {
 
     initialize() {
         this.board = new Board(this.game_map, this.players)
+        this.addBonusTroops();
+        this.board.update();
         this.selectedPlayer.playTurn();
     }
 
+    //clone = (items) => items.map(item => Array.isArray(item) ? clone(item) : item);
+    //JSON.parse(JSON.stringify(Array.from(this.game_map.territories)))
+
     nextTurn = () => {
-        this.history.push(new Map(JSON.parse(JSON.stringify(Array.from(this.game_map.territories)))))
-        if (this.history.length <= 100) {
+        this.history.push(new Map(_.cloneDeep(this.game_map.territories)))
+        if (this.history.length <= 1000) {
             if (!this.hasEnded()) {
                 this.deleteSelected();
                 this.selectedPlayer = this.players.shift();
@@ -69,12 +74,30 @@ class Game {
                 this.selectedPlayer.playTurn();
             } else this.endgame()
         }
-        else alert("maximum number of turns exceeded")
+        else {
+            this.moveExeededLimit(); 
+            alert("maximum number of turns exceeded")
+        }
     }
 
     endgame = () => {
         document.getElementById("end-game").style.display = "inline-block"
         document.getElementById("in-game").style.display = "none";
+        document.getElementById("player").style.display = "inline-block";
+        document.getElementById("won").style.display = "inline-block";
+        const historySlider = document.getElementById("history");
+        historySlider.max = this.history.length - 1;
+        historySlider.value = this.history.length - 1;
+        historySlider.onchange = () => {
+            this.board.visualization.historyUpdate(this.history[parseInt(document.getElementById("history").value)])
+        }
+    }
+
+    moveExeededLimit = () => {
+        document.getElementById("end-game").style.display = "inline-block"
+        document.getElementById("in-game").style.display = "none";
+        document.getElementById("player").style.display = "none";
+        document.getElementById("won").style.display = "none";
         const historySlider = document.getElementById("history");
         historySlider.max = this.history.length - 1;
         historySlider.value = this.history.length - 1;
@@ -151,5 +174,9 @@ class Game {
             if (this.players[i].territoriesCount() === this.game_map.territories.size) return true;
         }
         return false;
+    }
+
+    getCurrentState = () => {
+        return new Map(_.cloneDeep(this.game_map.territories));
     }
 }
