@@ -26,7 +26,6 @@ class GameMap {
     }
 
     hasEnemyNeighbours(id) {
-        console.log(id)
         const neighboursIds = this.getNeighbours(id);
         const territory = this.getTerritory(id);
         for (let neighbourId of neighboursIds) {

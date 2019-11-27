@@ -7,7 +7,7 @@
 */
 
 class Game {
-    constructor(game_map = new UsMap(), players = [new HumanAgent("#ff4356"), new HumanAgent("#78e6d0")]) {
+    constructor(game_map = new UsMap(), players = [new GreedyAgent("#ff4356"), new AggressiveAgent("#78e6d0")]) {
         if (!!Game.instance) {
             return Game.instance;
         }
@@ -53,6 +53,7 @@ class Game {
 
     initialize() {
         this.board = new Board(this.game_map, this.players)
+        this.history.push(new Map(_.cloneDeep(this.game_map.territories)))
         this.addBonusTroops();
         this.board.update();
         this.selectedPlayer.playTurn();
@@ -170,7 +171,7 @@ class Game {
 
     hasEnded = () => {
         for (let i = 0; i < this.players.length; i++) {
-            console.log(this.players[i].territoriesCount(), this.game_map.territories.size)
+            //console.log(this.players[i].territoriesCount(), this.game_map.territories.size)
             if (this.players[i].territoriesCount() === this.game_map.territories.size) return true;
         }
         return false;

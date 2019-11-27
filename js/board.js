@@ -13,8 +13,12 @@ class Board {
         this.game_map = game_map;
         this.players = players;
         this.initialize();
-        //this.visualization = new EgyptMapVisualization(this.game_map);
-        this.visualization = new UsMapVisualization(this.game_map);
+
+        if (this.game_map instanceof EgyptMap)
+            this.visualization = new EgyptMapVisualization(this.game_map);
+        else if (this.game_map instanceof UsMap)
+            this.visualization = new UsMapVisualization(this.game_map);
+
         this.visualization.updateControls();
     }
 
@@ -31,13 +35,13 @@ class Board {
             else i--;
         }
 
-        for (let p = 0; p < this.players.length ; p++) {
+
+        for (let p = 0; p < this.players.length; p++) {
             const player = this.players[p];
             let max = player.availableTroops
             let playerTerritories = [...player.territories];
             for (let i = 0; i < max; i++) {
                 let randomTerritoryIndex = Math.floor(Math.random() * playerTerritories.length);
-                console.log(randomTerritoryIndex)
                 playerTerritories[randomTerritoryIndex].setTroopsNumber(playerTerritories[randomTerritoryIndex].troops + 1);
                 player.availableTroops--;
             }

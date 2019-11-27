@@ -22,22 +22,20 @@ class UsMapVisualization extends game_map_visualization {
         let states = data.features;
         // let states = topojson.feature(data, data.objects.us).features;
 
-        console.log(states);
-
         //console.log(cities);
 
         let state = this.svg.selectAll(".state")
             .data(states)
             .enter().append("g")
             .on("mouseover", ({ properties: s }) => {
-                //if (!this.game.isCurrentPlayer(s.id)) return;
+                if (!this.game.isCurrentPlayer(s.id)) return;
                 d3.select(`#${s.id}`).attr("style", ({ properties: s }) => {
                     return "fill:" + this.LightenDarkenColor(this.game_map.getPlayer(s.id).color, -100)
                 }).classed("selected", true)
                 this.heighlightNeighbours(s.id);
             })
             .on("mouseout", ({ properties: s }) => {
-                //if (!this.game.isCurrentPlayer(s.id)) return;
+                if (!this.game.isCurrentPlayer(s.id)) return;
                 if (s.id == this.game.getSelectedTerritoryId()) return
                 d3.select(`#${s.id}`).attr("style", ({ properties: s }) => {
                     return "fill:" + this.game_map.getPlayer(s.id).color
@@ -76,7 +74,7 @@ class UsMapVisualization extends game_map_visualization {
                 return coords[1];
             })
             .text(({ properties: s }) => {
-                return s.id//this.game_map.getTroopsNumber(s.id);
+                return this.game_map.getTroopsNumber(s.id);
             })
             .attr("dx", -5)
             .attr("dy", 2.5)

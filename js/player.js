@@ -18,7 +18,7 @@ class Player {
     }
 
     lose(territory) {
-        if(this.territories.has(territory))
+        if (this.territories.has(territory))
             this.territories.delete(territory);
     }
 
@@ -84,7 +84,7 @@ class Player {
         }
         return this.getMinTroopsTerritory(neighboursTerritories);
     }
-    
+
     getMaxNeighbourTerritory(territory) {
         const neighboursIds = Game.instance.game_map.getEnemyNeighbours(territory.id);
         let neighboursTerritories = [];
@@ -95,11 +95,62 @@ class Player {
         return this.getMaxTroopsTerritory(neighboursTerritories);
     }
 
-    playTurn() {
-        
+    playTurn() { }
+
+    /* STATE RELATED METHODS */
+    evaluateState(state = Game.instance.getCurrentState()) {
+        let territories = state.values(), score = 0;
+        for (let territory of territories) {
+            if (territory.getPlayer().color != this.color) score++;
+        }
+        return score;
     }
 
-    endTurn() {
+    getPossibleTurns(state = Game.instance.getCurrentState()) {
+        const possibleAttacks = this.getPossibleAttacks(state);
+        let possibleTurns = [];
+        for (let attackMoves of possibleAttacks) {
+            const turn = new Turn(this, state, [], attackMoves);
+            turn.simulateStateAfter();
+            possibleTurns.push(turn);
+        }
+        return possibleTurns;
+    }
 
+    getPossibleAttacks(state = Game.instance.getCurrentState()) {
+        let possibleTurns = []; // [[{fromId, toId, numberOfTroops}, ...], ...]
+        let territories = state.values();
+
+        // territories that the player can attack from [{territory, enemies: [{id:"", troops: 0}, ...]}, ...]
+        let playerTerritories = [];
+
+        let maxPossibleWins = 0;
+        for (let territory of territories) {
+            let canWin = territory.canWinAttack(state);
+            if (territory.getPlayer().color === this.color && canWin.result) {
+                playerTerritories.push({ territory, enemies: canWin.enemyNeighbours });
+                if (canWin.enemyNeighbours.length > maxPossibleWins)
+                    maxPossibleWins = canWin.enemyNeighbours.length
+            }
+        }
+
+        for (let i = 0; i < maxPossibleWins; i++) {
+            possibleTurns[i] = []
+            for (let territory of playerTerritories) {
+                let territoryTroopsCount = territory.territory.troops;
+                for (let j = 0; j < Math.min(i + 1, territory.enemies.length); j++) {
+                    if (territoryTroopsCount > territory.enemies[j].troops && !possibleTurns.includes()) {
+                        territoryTroopsCount -= territory.enemies[j].troops + 1;
+                        possibleTurns[i].push({
+                            fromId: territory.territory.id,
+                            toId: territory.enemies[j].id,
+                            numberOfTroops: territory.enemies[j].troops + 1
+                        })
+                    }
+                }
+            }
+        }
+
+        return possibleTurns.filter((v, i) => i == 0 || v.length !== possibleTurns[i - 1].length);
     }
 }

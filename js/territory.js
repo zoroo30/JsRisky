@@ -66,17 +66,44 @@ class Territory {
      * @param {int} troopsCount => number of troops
      */
     attack(territory, troopsCount) {
+        if(troopsCount >= this.troops) return;
         this.troops -= troopsCount;
-        const result = troopsCount - territory.getTroopsNumber();
-        if (result === 0) // draw
-            territory.setTroopsNumber(1);
-        else if (result < 0) // defense won
-            territory.setTroopsNumber(-result);
-        else { // attack won
-            territory.setTroopsNumber(result);
-            territory.getPlayer().lose(territory);
-            territory.setPlayer(this.player);
-            this.player.setOwner(territory);
+        if (this.player === territory.getPlayer()) {
+            territory.setTroopsNumber(territory.getTroopsNumber() + troopsCount);
         }
+        else {
+            const result = troopsCount - territory.getTroopsNumber();
+            if (result === 0) // draw
+                territory.setTroopsNumber(1);
+            else if (result < 0) // defense won
+                territory.setTroopsNumber(-result);
+            else { // attack won
+                territory.setTroopsNumber(result);
+                territory.getPlayer().lose(territory);
+                territory.setPlayer(this.player);
+                this.player.setOwner(territory);
+            }
+        }
+    }
+
+    /* STATE RELATED METHODS */
+    getEnemyNeighbours(state) {
+        return this.neighbours.filter(id => this.player != state.get(id).player)
+    }
+
+    canWinAttack(state) {
+        let result = false, enemyNeighboursIds = [], enemyNeighbours = [];
+        if (this.troops > 1) {
+            enemyNeighboursIds = this.getEnemyNeighbours(state);
+            for (let neighbourId of enemyNeighboursIds) {
+                const neighbour = state.get(neighbourId);
+                if (neighbour.troops < this.troops) {
+                    result = true;
+                    enemyNeighbours.push({ id: neighbour.id, troops: neighbour.troops })
+                }
+            }
+            enemyNeighbours.sort((a, b) => (a.troops > b.troops) ? 1 : -1);
+        }
+        return { result, enemyNeighbours };
     }
 }

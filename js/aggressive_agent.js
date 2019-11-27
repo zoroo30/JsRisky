@@ -25,7 +25,7 @@ class AggressiveAgent extends Player {
             from = this.getMaxTroopsTerritory(this.getBorderTerritories());
             if (!from) break;
             to = this.getMaxNeighbourTerritory(from);
-            console.log(from, from.troops != 1, Game.instance.game_map.hasEnemyNeighbours(from.id))
+            //console.log(from, from.troops != 1, Game.instance.game_map.hasEnemyNeighbours(from.id))
         }
         Game.instance.nextTurn();
     }
