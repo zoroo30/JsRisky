@@ -1,7 +1,7 @@
-class GreedyAgent extends Player {
+class AStarAgent extends Player {
     constructor(color) {
         super(color);
-        this.agentName = "Greedy"
+        this.agentName = "A*"
     }
 
     playTurn() {
@@ -25,7 +25,7 @@ class GreedyAgent extends Player {
     greedySearch() {
         let intitialState = new Turn(this);
         intitialState.simulateStateAfter();
-        //console.log(this.getPossibleTurns(intitialState.stateAfter))
+        console.log(this.getPossibleTurns(intitialState.stateAfter))
 
         let frontier = new MinHeap(intitialState);
         let frontierSet = new Set();
@@ -53,10 +53,15 @@ class GreedyAgent extends Player {
             }
         }
 
-        //console.log(explored, bestTurn)
+        console.log(explored, bestTurn)
         return { result, explored, bestTurn }
     }
 
+    /**
+     * A* is the same as greedy but with the real cost to rach the end + heuristic
+     * the thing is our h(n) = realCost
+     * so it's exactly the same as greedy agent
+     */
     evaluateState(state = Game.instance.getCurrentState()) {
         let territories = state.values(), score = 0;
         for (let territory of territories) {

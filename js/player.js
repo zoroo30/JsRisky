@@ -99,11 +99,11 @@ class Player {
 
     /* STATE RELATED METHODS */
     evaluateState(state = Game.instance.getCurrentState()) {
-        let territories = state.values(), score = 0;
-        for (let territory of territories) {
-            if (territory.getPlayer().color != this.color) score++;
-        }
-        return score;
+        // let territories = state.values(), score = 0;
+        // for (let territory of territories) {
+        //     if (territory.getPlayer().color != this.color) score++;
+        // }
+        // return score;
     }
 
     getPossibleTurns(state = Game.instance.getCurrentState()) {
